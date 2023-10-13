@@ -1,5 +1,5 @@
-int dotSize = 30;
-int squareSize = 30;
+int dotSize = 10;
+int squareSize = 10;
 int stepSize = 7;
 int stepStart = -3;
 dot [] circles;
@@ -11,8 +11,8 @@ class square{
   square(int x,int y){
     squareX = x;
     squareY = y;
-    squareR = 250;
-    squareG = 50;
+    squareR = 50;
+    squareG = 250;
     squareB = 20;
   }//constructor end
   
@@ -40,7 +40,7 @@ class square{
   
   void show(){
     fill(squareR,squareG,squareB);
-    ellipse(squareX, squareY, squareSize, squareSize);
+    rect(squareX-(squareSize/2), squareY-(squareSize/2), squareSize, squareSize);
   }//void show end
 }//square class end
 
@@ -85,16 +85,30 @@ class dot{
 
 void setup(){
   size(500,500);
-  circles = new square[100];
+  
+  circles = new dot[100];
   for(int i = 0; i < circles.length; i++){
-    circles[i] = new square(250,250);
-  }
+    circles[i] = new dot(250,250);
+  }//circles end
+  
+  squares = new square[100];
+  for(int i = 0; i < squares.length; i++){
+    squares[i] = new square(250,250);
+  }//squares end
+  
 }//setup end
 
 void draw(){
   background(0);
+  
   for(int i = 0; i < circles.length; i++){
     circles[i].walk();
     circles[i].show();
-  }
+  }//circles end
+  
+  for(int i = 0; i < squares.length; i++){
+    squares[i].walk();
+    squares[i].show();
+  }//circles end
+  
 }//draw end
