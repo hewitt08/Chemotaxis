@@ -8,12 +8,11 @@ int health = 100;
 int wave;
 double velocityX = 0;
 double velocityY = 0;
-boolean wKey = false;
-boolean aKey = false;
-boolean sKey = false;
-boolean dKey = false;
+boolean space = false;
 boolean game = true;
 int lastWave = 10;
+int laserEndX;
+int laserEndY;
 
 
 class ship{
@@ -29,47 +28,35 @@ class ship{
   }
   
   void move(){
-    if(wKey == true){
-      velocityY = velocityY - 2;
-    }else{
-      velocityY = velocityY*0.8;
-    }
-    if(sKey == true){
-      velocityY = velocityY + 2;
-    }else{
-      velocityY = velocityY*0.8;
-    }
-    if(dKey == true){
-      velocityX = velocityX + 2;
-    }else{
-      velocityX = velocityX*0.8;
-    }
-    if(aKey == true){
-      velocityX = velocityX - 2;
-    }else{
-      velocityX = velocityX*0.8;
-    }//velocity mod end
     
     shipY = shipY + (int)velocityY;
     shipX = shipX + (int)velocityX;
     
     if(shipX > 485){
       shipX = 485;
-      velocityX = -1;
+      velocityX = 0;
     }
     if(shipX < 15){
       shipX = 15;
-      velocityX = 1;
+      velocityX = 0;
     }//x lock end
     if(shipY > 485){
       shipY = 485;
-      velocityY = -1;
+      velocityY = 0;
     }
     if(shipY < 15){
       shipY = 15;
-      velocityY = 1;
+      velocityY = 0;
     }//y lock end
   }//void move end
+  
+  void attack(){
+    if(space == true){
+      fill(0,255,0);
+      stroke(10);
+      line(shipX, shipY, laserEndX, laserEndY);
+    }
+  }
   
 }//ship class end
 
@@ -116,13 +103,14 @@ class dot{
     }
   }//void collide end
   
-/*
   void attacked(){
-    if(((abs(shipX-dotX))<15)&&((abs(shipY-dotY))<15)){
-      
+    if(get(dotX, dotY) == color(0,255,0)){
+      if(life == true){
+        wave = wave -1;
+        life = false;
+      }
     }
-  }
-*/
+  }//void attacked end
 
 }//dot class end
 
@@ -138,22 +126,11 @@ void setup(){
 void draw(){
   background(0,0,50);
   if(game == true){
-  
 /*
-  if(!(key == 'w')){
-    wKey = false;
-  }
-  if(!(key == 's')){
-    sKey = false;
-  }
-  if(!(key == 'd')){
-    dKey = false;
-  }
-  if(!(key == 'a')){
-    aKey = false;
-  }
-*/
-
+  velocityX*=0.9;
+  velocityY*=0.9;
+*/    
+  mouseShip.attack();
   mouseShip.show();
   mouseShip.move();
 
@@ -174,24 +151,31 @@ void draw(){
   }
   
   gameOver();
-  
-  System.out.println("X velocity is: " + velocityX);
-  System.out.println("Y velocity is: " + velocityY);
+
+  System.out.println("ShipX: " + shipX);
+  System.out.println("ShipY: " + shipY);
+  System.out.println("Laser End X: " + laserEndX);
+  System.out.println("Laser End Y: " + laserEndY);
   
 }//draw end
 
 void keyPressed(){
   if(key == 'w'){
-    wKey = true;
+    velocityY = velocityY - 2;
   }
   if(key == 's'){
-    sKey = true;
+    velocityY = velocityY + 2;
   }
   if(key == 'd'){
-    dKey = true;
+    velocityX = velocityX + 2;
   }
   if(key == 'a'){
-    aKey = true;
+    velocityX = velocityX - 2;
+  }
+  if(key == ' '){
+    space = !space;
+    laserEndX = mouseX;
+    laserEndY = mouseY;
   }
 }
 
@@ -219,7 +203,7 @@ void gameOver(){
   if(health == 0){
     fill(200,200,200);
     textSize(80);
-    text("GAME OVER", 60,250);
+    text("GAME OVER", 20,250);
     game = false;
   }
 }
