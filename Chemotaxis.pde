@@ -8,12 +8,33 @@ int health = 100;
 int wave;
 double velocityX = 0;
 double velocityY = 0;
-boolean space = false;
 boolean game = true;
 int lastWave = 10;
-int laserEndX;
-int laserEndY;
+int laserEndX = mouseX;
+int laserEndY = mouseY;
+int dots = 0;
+missile bullet;
 
+class missile{
+  int misX, misY, misXInc, misYInc, yforxInc;
+  boolean fired;
+  
+  missile(){
+    misX = shipX;
+    misY = shipY;
+    fired = false;
+  }//constructor end
+  
+  void move(){
+    if(fired == true){
+      misX += misXInc;
+      misY += misYInc;
+      fill(0,255,0);
+      ellipse(misX, misY, 5, 5);
+    }//if end
+  }//move end
+
+}//missile class end
 
 class ship{
   
@@ -32,6 +53,9 @@ class ship{
     shipY = shipY + (int)velocityY;
     shipX = shipX + (int)velocityX;
     
+    velocityX *= 0.9;
+    velocityY *= 0.9;
+    
     if(shipX > 485){
       shipX = 485;
       velocityX = 0;
@@ -49,14 +73,6 @@ class ship{
       velocityY = 0;
     }//y lock end
   }//void move end
-  
-  void attack(){
-    if(space == true){
-      fill(0,255,0);
-      stroke(10);
-      line(shipX, shipY, laserEndX, laserEndY);
-    }
-  }
   
 }//ship class end
 
@@ -104,10 +120,11 @@ class dot{
   }//void collide end
   
   void attacked(){
-    if(get(dotX, dotY) == color(0,255,0)){
+    if(((abs(bullet.misX-dotX))<15)&&((abs(bullet.misY-dotY))<15)){
       if(life == true){
         wave = wave -1;
         life = false;
+        bullet.fired = false;
       }
     }
   }//void attacked end
@@ -119,6 +136,8 @@ void setup(){
   
   mouseShip = new ship(50, 250);
   
+  bullet = new missile();
+  
   wave(10);
   
 }//setup end
@@ -126,17 +145,15 @@ void setup(){
 void draw(){
   background(0,0,50);
   if(game == true){
-/*
-  velocityX*=0.9;
-  velocityY*=0.9;
-*/    
-  mouseShip.attack();
+
   mouseShip.show();
   mouseShip.move();
+  bullet.move();
 
   for(int i = 0; i < circles.length; i++){
     circles[i].walk();
     circles[i].collide();
+    circles[i].attacked();
     if(circles[i].life == true){
       circles[i].show();
     }
@@ -144,38 +161,43 @@ void draw(){
   
   if(wave == 0){
     wave(lastWave * 2);
-  }
+  }//if wave is out end
   
   healthBar();
   
-  }
+  }//if game is on end
   
   gameOver();
-
-  System.out.println("ShipX: " + shipX);
-  System.out.println("ShipY: " + shipY);
-  System.out.println("Laser End X: " + laserEndX);
-  System.out.println("Laser End Y: " + laserEndY);
   
 }//draw end
 
 void keyPressed(){
   if(key == 'w'){
-    velocityY = velocityY - 2;
+    velocityY = velocityY - 10;
   }
   if(key == 's'){
-    velocityY = velocityY + 2;
+    velocityY = velocityY + 10;
   }
   if(key == 'd'){
-    velocityX = velocityX + 2;
+    velocityX = velocityX + 10;
   }
   if(key == 'a'){
-    velocityX = velocityX - 2;
+    velocityX = velocityX - 10;
   }
   if(key == ' '){
-    space = !space;
     laserEndX = mouseX;
     laserEndY = mouseY;
+    bullet.misX = shipX;
+    bullet.misY = shipY;
+    
+    bullet.yforxInc = (int)abs((laserEndX - bullet.misX)/10);
+    if(bullet.yforxInc == 0){
+      bullet.yforxInc = 1;
+    }
+    bullet.misXInc = (laserEndX - bullet.misX)/bullet.yforxInc;
+    bullet.misYInc = (laserEndY - bullet.misY)/bullet.yforxInc;
+    
+    bullet.fired = true;
   }
 }
 
@@ -200,23 +222,25 @@ void healthBar(){
 }
 
 void gameOver(){
-  if(health == 0){
+  if((health == 0)||(dots>5000)){
     fill(200,200,200);
-    textSize(80);
-    text("GAME OVER", 20,250);
+    textSize(50);
+    text("GAME OVER", 20,50);
+    text("PLAY AGAIN? . . . ", 20, 100);
     game = false;
   }
 }
 
 void wave(int w){
   wave = w;
+  dots = dots + wave;
   lastWave = wave;
   circles = new dot[wave];
   for(int i = 0; i < circles.length; i++){
     if(w<50){
-      circles[i] = new dot(450,(250-(w*5)+(i*10)));
+      circles[i] = new dot(((int)(Math.random()*400)+100),(250-(w*5)+(i*10)));
     }else{
-      circles[i] = new dot(450,(250));
+      circles[i] = new dot(((int)(Math.random()*400)+100),(int)(Math.random()*500));
     }
   }//circles end
 }
