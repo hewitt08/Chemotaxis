@@ -13,6 +13,7 @@ int lastWave = 10;
 int laserEndX = mouseX;
 int laserEndY = mouseY;
 int dots = 0;
+int score = 0;
 missile bullet;
 
 class missile{
@@ -139,6 +140,7 @@ class dot{
         wave = wave -1;
         life = false;
         bullet.fired = false;
+        score++;
       }
     }
   }//void attacked end
@@ -163,7 +165,7 @@ void draw(){
   mouseShip.show();
   mouseShip.move();
   bullet.move();
-z
+
   for(int i = 0; i < circles.length; i++){
     circles[i].walk();
     circles[i].collide();
@@ -178,6 +180,7 @@ z
   }//if wave is out end
   
   healthBar();
+  score();
   
   }//if game is on end
   
@@ -240,7 +243,8 @@ void gameOver(){
     fill(200,200,200);
     textSize(50);
     text("GAME OVER", 20,50);
-    text("PLAY AGAIN? . . . ", 20, 100);
+    text("PLAY AGAIN? . . . ", 20, 150);
+    text("FINAL SCORE: " + score,20,100);
     game = false;
   }
 }
@@ -259,3 +263,8 @@ void newWave(int w){
   }//circles end
 }
   
+void score(){
+  fill(255);
+  textSize(20);
+  text("SCORE: " + score,20,75);
+}
