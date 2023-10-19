@@ -49,6 +49,20 @@ class ship{
   }
   
   void move(){
+
+    if(velocityX>10){
+      velocityX=10;
+    }
+    if(velocityX<-10){
+      velocityX=-10;
+    }//velocityX cap
+
+   if(velocityY>10){
+      velocityY=10;
+    }
+    if(velocityY<-10){
+      velocityY=-10;
+    }//velocityY cap
     
     shipY = shipY + (int)velocityY;
     shipX = shipX + (int)velocityX;
@@ -143,13 +157,13 @@ void setup(){
 }//setup end
 
 void draw(){
-  background(0,0,50);
+  background(0,0,100);
   if(game == true){
 
   mouseShip.show();
   mouseShip.move();
   bullet.move();
-
+z
   for(int i = 0; i < circles.length; i++){
     circles[i].walk();
     circles[i].collide();
