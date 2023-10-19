@@ -51,18 +51,18 @@ class ship{
   
   void move(){
 
-    if(velocityX>10){
-      velocityX=10;
+    if(velocityX>50){
+      velocityX=50;
     }
-    if(velocityX<-10){
-      velocityX=-10;
+    if(velocityX<-50){
+      velocityX=-50;
     }//velocityX cap
 
-   if(velocityY>10){
-      velocityY=10;
+   if(velocityY>50){
+      velocityY=50;
     }
-    if(velocityY<-10){
-      velocityY=-10;
+    if(velocityY<-50){
+      velocityY=-50;
     }//velocityY cap
     
     shipY = shipY + (int)velocityY;
@@ -136,7 +136,7 @@ class dot{
   
   void attacked(){
     if(((abs(bullet.misX-dotX))<15)&&((abs(bullet.misY-dotY))<15)){
-      if(life == true){
+      if((life == true) && (bullet.fired == true)){
         wave = wave -1;
         life = false;
         bullet.fired = false;
@@ -160,6 +160,7 @@ void setup(){
 
 void draw(){
   background(0,0,100);
+  
   if(game == true){
 
   mouseShip.show();
@@ -180,7 +181,7 @@ void draw(){
   }//if wave is out end
   
   healthBar();
-  showScore();
+  score();
   
   }//if game is on end
   
@@ -263,7 +264,7 @@ void newWave(int w){
   }//circles end
 }
   
-void showScore(){
+void score(){
   fill(255);
   textSize(20);
   text("SCORE: " + score,20,75);
