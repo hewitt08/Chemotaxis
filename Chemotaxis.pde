@@ -138,7 +138,7 @@ void setup(){
   
   bullet = new missile();
   
-  wave(10);
+  newWave(10);
   
 }//setup end
 
@@ -160,7 +160,7 @@ void draw(){
   }//circles end
   
   if(wave == 0){
-    wave(lastWave * 2);
+    newWave(lastWave * 2);
   }//if wave is out end
   
   healthBar();
@@ -231,7 +231,7 @@ void gameOver(){
   }
 }
 
-void wave(int w){
+void newWave(int w){
   wave = w;
   dots = dots + wave;
   lastWave = wave;
