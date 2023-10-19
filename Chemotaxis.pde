@@ -181,7 +181,7 @@ void draw(){
   }//if wave is out end
   
   healthBar();
-  score();
+  showScore();
   
   }//if game is on end
   
@@ -264,7 +264,7 @@ void newWave(int w){
   }//circles end
 }
   
-void score(){
+void showScore(){
   fill(255);
   textSize(20);
   text("SCORE: " + score,20,75);
